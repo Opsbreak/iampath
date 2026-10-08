@@ -61,9 +61,11 @@ jobs:
       - name: smoke test against fixture
         shell: bash
         run: |
-          go run ./cmd/iampath paths -i testdata/account.json --format text > /dev/null
+          # Build a real binary: `go run` reports any non-zero program exit as 1.
+          go build -o "$RUNNER_TEMP/bin/" ./cmd/iampath
+          "$RUNNER_TEMP/bin/iampath" paths -i testdata/account.json --format text > /dev/null
           set +e
-          go run ./cmd/iampath paths -i testdata/account.json --fail-on-paths -q > /dev/null
+          "$RUNNER_TEMP/bin/iampath" paths -i testdata/account.json --fail-on-paths -q > /dev/null
           code=$?
           set -e
           if [ "$code" -ne 3 ]; then
