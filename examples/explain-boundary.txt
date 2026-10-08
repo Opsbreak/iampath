@@ -1,0 +1,21 @@
+Principal: user/erin (arn:aws:iam::111122223333:user/erin)
+Request:   iam:PutUserPolicy on arn:aws:iam::111122223333:user/erin
+Context:   aws:PrincipalAccount=111122223333 aws:PrincipalArn=arn:aws:iam::111122223333:user/erin aws:PrincipalIsAWSService=false aws:PrincipalTag/team=web aws:PrincipalType=User aws:userid=AIDATFESHO2P2ZV6YIKWZ aws:username=erin
+           (other condition keys are unknown offline)
+
+Policies evaluated:
+  identity  SelfServiceIAM (inline)
+  identity  DeveloperPolicy (group:Developers)
+  boundary  DeveloperBoundary
+  scp       (none supplied)
+
+Matching statements:
+  [identity] SelfServiceIAM (inline) stmt ManageOwnUserPolicies: Allow
+
+Evaluation (AWS order):
+  explicit deny          false
+  identity               true
+  permissions boundary   false
+
+Decision: ImplicitDeny
+  not allowed by permissions boundary DeveloperBoundary (permissions boundary)

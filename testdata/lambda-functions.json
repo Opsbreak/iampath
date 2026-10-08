@@ -1,0 +1,36 @@
+{
+    "Functions": [
+        {
+            "FunctionName": "nightly-report",
+            "FunctionArn": "arn:aws:lambda:ca-central-1:111122223333:function:nightly-report",
+            "Runtime": "python3.12",
+            "Role": "arn:aws:iam::111122223333:role/service-role/LambdaAdminExec",
+            "Handler": "app.handler",
+            "CodeSize": 48213,
+            "Description": "Builds the nightly cost report",
+            "Timeout": 300,
+            "MemorySize": 512,
+            "LastModified": "2026-08-12T15:21:09.000+0000",
+            "PackageType": "Zip",
+            "Architectures": [
+                "arm64"
+            ]
+        },
+        {
+            "FunctionName": "image-thumbnailer",
+            "FunctionArn": "arn:aws:lambda:ca-central-1:111122223333:function:image-thumbnailer",
+            "Runtime": "nodejs20.x",
+            "Role": "arn:aws:iam::111122223333:role/service-role/LambdaThumbnailer",
+            "Handler": "index.handler",
+            "CodeSize": 1022764,
+            "Description": "",
+            "Timeout": 30,
+            "MemorySize": 1024,
+            "LastModified": "2026-05-02T10:07:55.000+0000",
+            "PackageType": "Zip",
+            "Architectures": [
+                "x86_64"
+            ]
+        }
+    ]
+}

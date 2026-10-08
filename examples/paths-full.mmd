@@ -1,0 +1,49 @@
+flowchart LR
+  n0["role/BreakGlassAdmin"]
+  n1{{"ADMIN"}}
+  n2["role/CI-Deployer"]
+  n3["role/InfraAutomation"]
+  n4["role/EC2-AdminInstance"]
+  n5["role/EC2-AppServer"]
+  n6["role/CodeBuildDeployRole"]
+  n7["role/LambdaAdminExec"]
+  n8["role/OrgAdmin"]
+  n9(["user/alice"])
+  n10(["user/bob"])
+  n11(["user/carol"])
+  n12(["user/dave"])
+  n13(["user/heidi"])
+  n14(["user/ivan"])
+  n15(["user/judy"])
+  n16(["user/ken"])
+  n17(["user/olivia"])
+  n18(["user/peggy"])
+  n19(["user/quinn"])
+  n20(["user/trent"])
+  n0 -->|"ADMIN"| n1
+  n2 -->|"STS-001 AssumeRole"| n3
+  n4 -->|"ADMIN"| n1
+  n5 -->|"SSM-001 SSM SendCommand"| n4
+  n5 -->|"CB-001 CodeBuild StartBuild (buildspec override)"| n6
+  n5 -->|"LAMBDA-003 UpdateFunctionCode"| n7
+  n3 -->|"STS-001 AssumeRole"| n8
+  n8 -->|"ADMIN"| n1
+  n6 -->|"ADMIN"| n1
+  n7 -->|"ADMIN"| n1
+  n9 -->|"IAM-001 CreatePolicyVersion"| n1
+  n10 -->|"STS-001 AssumeRole"| n2
+  n11 -->|"LAMBDA-001 PassRole+Lambda CreateFunction+InvokeFunction"| n7
+  n12 -.->|"STS-001 AssumeRole"| n0
+  n13 -->|"ADMIN"| n1
+  n14 -->|"IAM-010 CreateAccessKey"| n9
+  n14 -->|"IAM-010 CreateAccessKey"| n13
+  n14 -->|"IAM-010 CreateAccessKey"| n15
+  n15 -->|"IAM-009 AddUserToGroup"| n1
+  n16 -.->|"SSM-001 SSM SendCommand"| n4
+  n16 -.->|"SSM-001 SSM SendCommand"| n5
+  n17 -->|"LAMBDA-003 UpdateFunctionCode"| n7
+  n18 -->|"IAM-002 SetDefaultPolicyVersion"| n1
+  n19 -->|"CB-001 CodeBuild StartBuild (buildspec override)"| n6
+  n20 -->|"IAM-013 UpdateAssumeRolePolicy"| n8
+  classDef admin fill:#d62728,color:#fff,stroke:#8c1c1c
+  class n0,n1,n4,n6,n7,n8,n13 admin

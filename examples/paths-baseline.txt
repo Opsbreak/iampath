@@ -1,0 +1,61 @@
+iampath 0.1.0 - offline IAM privilege-escalation analysis
+Account 111122223333: 28 principals, 28 escalation edges, 6 admin-equivalent principals.
+
+Administrator-equivalent principals:
+  role/BreakGlassAdmin      effective policy allows * on *
+  role/EC2-AdminInstance    effective policy allows * on *
+  role/OrgAdmin             effective policy allows * on *
+  role/CodeBuildDeployRole  effective policy allows iam:* on *
+  role/LambdaAdminExec      effective policy allows * on *
+  user/heidi                effective policy allows * on *
+
+Escalation paths: 12 principals can reach ADMIN (10 unconditionally, 2 only conditionally).
+
+[1] role/InfraAutomation  (1 step, cost 1)
+    role/InfraAutomation --[STS-001 AssumeRole]--> role/OrgAdmin ==> ADMIN
+
+[2] user/alice  (1 step, cost 1)
+    user/alice --[IAM-001 CreatePolicyVersion on arn:aws:iam::111122223333:policy/DeveloperPolicy]--> ADMIN
+
+[3] user/frank  (1 step, cost 1)
+    user/frank --[IAM-003 AttachUserPolicy on arn:aws:iam::111122223333:user/frank (attach arn:aws:iam::aws:policy/AdministratorAccess)]--> ADMIN
+
+[4] user/ivan  (1 step, cost 1)
+    path 1 (1 step, cost 1):
+      user/ivan --[IAM-010 CreateAccessKey]--> user/heidi ==> ADMIN
+    path 2 (2 steps, cost 2):
+      user/ivan --[IAM-010 CreateAccessKey]--> user/alice --[IAM-001 CreatePolicyVersion on arn:aws:iam::111122223333:policy/DeveloperPolicy]--> ADMIN
+    path 3 (2 steps, cost 2):
+      user/ivan --[IAM-010 CreateAccessKey]--> user/frank --[IAM-003 AttachUserPolicy on arn:aws:iam::111122223333:user/frank (attach arn:aws:iam::aws:policy/AdministratorAccess)]--> ADMIN
+
+[5] user/judy  (1 step, cost 1)
+    user/judy --[IAM-009 AddUserToGroup on arn:aws:iam::111122223333:group/Admins (join group Admins)]--> ADMIN
+
+[6] user/peggy  (1 step, cost 1)
+    user/peggy --[IAM-002 SetDefaultPolicyVersion on arn:aws:iam::111122223333:policy/ReportingAnalystPolicy (restore version v1)]--> ADMIN
+
+[7] role/CI-Deployer  (2 steps, cost 2)
+    role/CI-Deployer --[STS-001 AssumeRole]--> role/InfraAutomation --[STS-001 AssumeRole]--> role/OrgAdmin ==> ADMIN
+
+[8] user/carol  (1 step, cost 2)
+    user/carol --[LAMBDA-001 PassRole+Lambda CreateFunction+InvokeFunction]--> role/LambdaAdminExec ==> ADMIN
+
+[9] user/trent  (1 step, cost 2)
+    user/trent --[IAM-013 UpdateAssumeRolePolicy]--> role/OrgAdmin ==> ADMIN
+
+[10] user/bob  (3 steps, cost 3)
+    user/bob --[STS-001 AssumeRole]--> role/CI-Deployer --[STS-001 AssumeRole]--> role/InfraAutomation --[STS-001 AssumeRole]--> role/OrgAdmin ==> ADMIN
+
+[11] role/EC2-AppServer  (1 step, cost 4, CONDITIONAL)
+    role/EC2-AppServer --[STS-001 AssumeRole [conditional]]--> role/BreakGlassAdmin ==> ADMIN
+      ! trust policy: Bool aws:MultiFactorAuthPresent=[true] (key not known offline)
+
+[12] user/dave  (1 step, cost 4, CONDITIONAL)
+    user/dave --[STS-001 AssumeRole [conditional]]--> role/BreakGlassAdmin ==> ADMIN
+      ! trust policy: Bool aws:MultiFactorAuthPresent=[true] (key not known offline)
+
+No path to ADMIN (9): role/GlueETLRole, role/LambdaThumbnailer, role/ReadOnlyAuditor, user/erin, user/grace, user/ken, user/olivia, user/quinn, user/svc-backup
+
+Cycles (principals that can reach each other):
+  role/CI-Deployer <-> role/InfraAutomation
+

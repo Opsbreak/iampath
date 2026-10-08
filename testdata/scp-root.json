@@ -1,0 +1,28 @@
+[
+    {
+        "Policy": {
+            "PolicySummary": {
+                "Id": "p-FullAWSAccess",
+                "Arn": "arn:aws:organizations::aws:policy/service_control_policy/p-FullAWSAccess",
+                "Name": "FullAWSAccess",
+                "Description": "Allows access to every operation",
+                "Type": "SERVICE_CONTROL_POLICY",
+                "AwsManaged": true
+            },
+            "Content": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"*\",\"Resource\":\"*\"}]}"
+        }
+    },
+    {
+        "Policy": {
+            "PolicySummary": {
+                "Id": "p-7k2m9x4q",
+                "Arn": "arn:aws:organizations::999988887777:policy/o-a1b2c3d4e5/service_control_policy/p-7k2m9x4q",
+                "Name": "DenyIAMUserPolicyChanges",
+                "Description": "IAM users are managed through Identity Center; block direct user policy changes",
+                "Type": "SERVICE_CONTROL_POLICY",
+                "AwsManaged": false
+            },
+            "Content": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Sid\":\"DenyIAMUserPolicyChanges\",\"Effect\":\"Deny\",\"Action\":[\"iam:AttachUserPolicy\",\"iam:PutUserPolicy\",\"iam:CreateLoginProfile\",\"iam:UpdateLoginProfile\"],\"Resource\":\"*\",\"Condition\":{\"ArnNotLike\":{\"aws:PrincipalArn\":[\"arn:aws:iam::*:role/OrgAdmin\",\"arn:aws:iam::*:role/BreakGlassAdmin\"]}}}]}"
+        }
+    }
+]

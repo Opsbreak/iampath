@@ -1,0 +1,72 @@
+{
+    "Reservations": [
+        {
+            "ReservationId": "r-0a4b7c1d2e3f40516",
+            "OwnerId": "111122223333",
+            "Groups": [],
+            "Instances": [
+                {
+                    "InstanceId": "i-0a1b2c3d4e5f60718",
+                    "ImageId": "ami-0c9f3b4ad9e8f1a20",
+                    "InstanceType": "t3.medium",
+                    "State": {
+                        "Code": 16,
+                        "Name": "running"
+                    },
+                    "Placement": {
+                        "AvailabilityZone": "ca-central-1a",
+                        "Tenancy": "default"
+                    },
+                    "IamInstanceProfile": {
+                        "Arn": "arn:aws:iam::111122223333:instance-profile/EC2-AdminInstance",
+                        "Id": "AIPACKV66F7HIDIYY4LXH"
+                    },
+                    "Tags": [
+                        {
+                            "Key": "Name",
+                            "Value": "ops-bastion"
+                        },
+                        {
+                            "Key": "Env",
+                            "Value": "prod"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "ReservationId": "r-0f9e8d7c6b5a40312",
+            "OwnerId": "111122223333",
+            "Groups": [],
+            "Instances": [
+                {
+                    "InstanceId": "i-0fedcba9876543210",
+                    "ImageId": "ami-0c9f3b4ad9e8f1a20",
+                    "InstanceType": "t3.medium",
+                    "State": {
+                        "Code": 16,
+                        "Name": "running"
+                    },
+                    "Placement": {
+                        "AvailabilityZone": "ca-central-1b",
+                        "Tenancy": "default"
+                    },
+                    "IamInstanceProfile": {
+                        "Arn": "arn:aws:iam::111122223333:instance-profile/EC2-AppServer",
+                        "Id": "AIPAEUJBJ55JV2TLRWVJM"
+                    },
+                    "Tags": [
+                        {
+                            "Key": "Name",
+                            "Value": "app-server-1"
+                        },
+                        {
+                            "Key": "Env",
+                            "Value": "dev"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

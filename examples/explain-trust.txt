@@ -1,0 +1,23 @@
+Principal: user/dave (arn:aws:iam::111122223333:user/dave)
+Request:   sts:AssumeRole on arn:aws:iam::111122223333:role/BreakGlassAdmin
+Context:   aws:PrincipalAccount=111122223333 aws:PrincipalArn=arn:aws:iam::111122223333:user/dave aws:PrincipalIsAWSService=false aws:PrincipalTag/team=sre aws:PrincipalType=User aws:userid=AIDARBWFZJTM6FWMAEDBM aws:username=dave
+           (other condition keys are unknown offline)
+
+Policies evaluated:
+  identity  BreakGlassAccess (inline)
+  boundary  (none)
+  scp       (none supplied)
+
+Matching statements:
+  [identity] BreakGlassAccess (inline) stmt AssumeBreakGlass: Allow
+
+Evaluation (AWS order):
+  explicit deny          false
+  identity               true
+
+Decision: Allow
+  allowed by [identity] BreakGlassAccess (inline) stmt AssumeBreakGlass: Allow
+
+Trust policy of role/BreakGlassAdmin: trust policy allows (unknown)
+  [trust] trust policy of BreakGlassAdmin stmt #0: Allow (conditional: Bool aws:MultiFactorAuthPresent=[true] (key not known offline))
+  trust names the account: the identity decision above must also be Allow

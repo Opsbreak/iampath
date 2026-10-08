@@ -1,0 +1,20 @@
+Principal: user/frank (arn:aws:iam::111122223333:user/frank)
+Request:   iam:AttachUserPolicy on arn:aws:iam::111122223333:user/frank
+Context:   aws:PrincipalAccount=111122223333 aws:PrincipalArn=arn:aws:iam::111122223333:user/frank aws:PrincipalIsAWSService=false aws:PrincipalTag/team=web aws:PrincipalType=User aws:userid=AIDA5GHYHXA5IPD5EWMGY aws:username=frank
+           (other condition keys are unknown offline)
+
+Policies evaluated:
+  identity  ManageOwnPermissions (inline)
+  boundary  (none)
+  scp L1    FullAWSAccess, DenyIAMUserPolicyChanges
+
+Matching statements:
+  [identity] ManageOwnPermissions (inline) stmt SelfManagedPolicies: Allow
+  [scp] FullAWSAccess (scp) stmt #0: Allow
+  [scp] DenyIAMUserPolicyChanges (scp) stmt DenyIAMUserPolicyChanges: Deny
+
+Evaluation (AWS order):
+  explicit deny          true
+
+Decision: ExplicitDeny
+  explicitly denied by [scp] DenyIAMUserPolicyChanges (scp) stmt DenyIAMUserPolicyChanges: Deny

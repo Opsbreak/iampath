@@ -1,0 +1,674 @@
+{
+  "tool": "iampath",
+  "version": "0.1.0",
+  "accountId": "111122223333",
+  "summary": {
+    "principals": 28,
+    "edges": 35,
+    "adminEquivalent": 6,
+    "principalsWithPaths": 14,
+    "principalsWithUnconditionalPaths": 12,
+    "principalsWithoutPaths": 7
+  },
+  "admins": [
+    {
+      "principal": "role/BreakGlassAdmin",
+      "arn": "arn:aws:iam::111122223333:role/BreakGlassAdmin",
+      "reason": "effective policy allows * on *"
+    },
+    {
+      "principal": "role/EC2-AdminInstance",
+      "arn": "arn:aws:iam::111122223333:role/EC2-AdminInstance",
+      "reason": "effective policy allows * on *"
+    },
+    {
+      "principal": "role/OrgAdmin",
+      "arn": "arn:aws:iam::111122223333:role/OrgAdmin",
+      "reason": "effective policy allows * on *"
+    },
+    {
+      "principal": "role/CodeBuildDeployRole",
+      "arn": "arn:aws:iam::111122223333:role/service-role/CodeBuildDeployRole",
+      "reason": "effective policy allows iam:* on *"
+    },
+    {
+      "principal": "role/LambdaAdminExec",
+      "arn": "arn:aws:iam::111122223333:role/service-role/LambdaAdminExec",
+      "reason": "effective policy allows * on *"
+    },
+    {
+      "principal": "user/heidi",
+      "arn": "arn:aws:iam::111122223333:user/heidi",
+      "reason": "effective policy allows * on *"
+    }
+  ],
+  "findings": [
+    {
+      "principal": "role/InfraAutomation",
+      "arn": "arn:aws:iam::111122223333:role/InfraAutomation",
+      "paths": [
+        {
+          "steps": 1,
+          "cost": 1,
+          "conditional": false,
+          "rendered": "role/InfraAutomation --[STS-001 AssumeRole]--> role/OrgAdmin ==> ADMIN",
+          "hops": [
+            {
+              "from": "role/InfraAutomation",
+              "to": "role/OrgAdmin",
+              "technique": "STS-001",
+              "techniqueName": "AssumeRole",
+              "resource": "arn:aws:iam::111122223333:role/OrgAdmin",
+              "conditional": false
+            },
+            {
+              "from": "role/OrgAdmin",
+              "to": "ADMIN",
+              "technique": "ADMIN",
+              "techniqueName": "administrator-equivalent",
+              "via": "effective policy allows * on *",
+              "conditional": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "principal": "user/alice",
+      "arn": "arn:aws:iam::111122223333:user/alice",
+      "paths": [
+        {
+          "steps": 1,
+          "cost": 1,
+          "conditional": false,
+          "rendered": "user/alice --[IAM-001 CreatePolicyVersion on arn:aws:iam::111122223333:policy/DeveloperPolicy]--> ADMIN",
+          "hops": [
+            {
+              "from": "user/alice",
+              "to": "ADMIN",
+              "technique": "IAM-001",
+              "techniqueName": "CreatePolicyVersion",
+              "resource": "arn:aws:iam::111122223333:policy/DeveloperPolicy",
+              "conditional": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "principal": "user/ivan",
+      "arn": "arn:aws:iam::111122223333:user/ivan",
+      "paths": [
+        {
+          "steps": 1,
+          "cost": 1,
+          "conditional": false,
+          "rendered": "user/ivan --[IAM-010 CreateAccessKey]--> user/heidi ==> ADMIN",
+          "hops": [
+            {
+              "from": "user/ivan",
+              "to": "user/heidi",
+              "technique": "IAM-010",
+              "techniqueName": "CreateAccessKey",
+              "resource": "arn:aws:iam::111122223333:user/heidi",
+              "conditional": false
+            },
+            {
+              "from": "user/heidi",
+              "to": "ADMIN",
+              "technique": "ADMIN",
+              "techniqueName": "administrator-equivalent",
+              "via": "effective policy allows * on *",
+              "conditional": false
+            }
+          ]
+        },
+        {
+          "steps": 2,
+          "cost": 2,
+          "conditional": false,
+          "rendered": "user/ivan --[IAM-010 CreateAccessKey]--> user/alice --[IAM-001 CreatePolicyVersion on arn:aws:iam::111122223333:policy/DeveloperPolicy]--> ADMIN",
+          "hops": [
+            {
+              "from": "user/ivan",
+              "to": "user/alice",
+              "technique": "IAM-010",
+              "techniqueName": "CreateAccessKey",
+              "resource": "arn:aws:iam::111122223333:user/alice",
+              "conditional": false
+            },
+            {
+              "from": "user/alice",
+              "to": "ADMIN",
+              "technique": "IAM-001",
+              "techniqueName": "CreatePolicyVersion",
+              "resource": "arn:aws:iam::111122223333:policy/DeveloperPolicy",
+              "conditional": false
+            }
+          ]
+        },
+        {
+          "steps": 2,
+          "cost": 2,
+          "conditional": false,
+          "rendered": "user/ivan --[IAM-010 CreateAccessKey]--> user/judy --[IAM-009 AddUserToGroup on arn:aws:iam::111122223333:group/Admins (join group Admins)]--> ADMIN",
+          "hops": [
+            {
+              "from": "user/ivan",
+              "to": "user/judy",
+              "technique": "IAM-010",
+              "techniqueName": "CreateAccessKey",
+              "resource": "arn:aws:iam::111122223333:user/judy",
+              "conditional": false
+            },
+            {
+              "from": "user/judy",
+              "to": "ADMIN",
+              "technique": "IAM-009",
+              "techniqueName": "AddUserToGroup",
+              "resource": "arn:aws:iam::111122223333:group/Admins",
+              "via": "join group Admins",
+              "conditional": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "principal": "user/judy",
+      "arn": "arn:aws:iam::111122223333:user/judy",
+      "paths": [
+        {
+          "steps": 1,
+          "cost": 1,
+          "conditional": false,
+          "rendered": "user/judy --[IAM-009 AddUserToGroup on arn:aws:iam::111122223333:group/Admins (join group Admins)]--> ADMIN",
+          "hops": [
+            {
+              "from": "user/judy",
+              "to": "ADMIN",
+              "technique": "IAM-009",
+              "techniqueName": "AddUserToGroup",
+              "resource": "arn:aws:iam::111122223333:group/Admins",
+              "via": "join group Admins",
+              "conditional": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "principal": "user/peggy",
+      "arn": "arn:aws:iam::111122223333:user/peggy",
+      "paths": [
+        {
+          "steps": 1,
+          "cost": 1,
+          "conditional": false,
+          "rendered": "user/peggy --[IAM-002 SetDefaultPolicyVersion on arn:aws:iam::111122223333:policy/ReportingAnalystPolicy (restore version v1)]--> ADMIN",
+          "hops": [
+            {
+              "from": "user/peggy",
+              "to": "ADMIN",
+              "technique": "IAM-002",
+              "techniqueName": "SetDefaultPolicyVersion",
+              "resource": "arn:aws:iam::111122223333:policy/ReportingAnalystPolicy",
+              "via": "restore version v1",
+              "conditional": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "principal": "role/CI-Deployer",
+      "arn": "arn:aws:iam::111122223333:role/CI-Deployer",
+      "paths": [
+        {
+          "steps": 2,
+          "cost": 2,
+          "conditional": false,
+          "rendered": "role/CI-Deployer --[STS-001 AssumeRole]--> role/InfraAutomation --[STS-001 AssumeRole]--> role/OrgAdmin ==> ADMIN",
+          "hops": [
+            {
+              "from": "role/CI-Deployer",
+              "to": "role/InfraAutomation",
+              "technique": "STS-001",
+              "techniqueName": "AssumeRole",
+              "resource": "arn:aws:iam::111122223333:role/InfraAutomation",
+              "conditional": false
+            },
+            {
+              "from": "role/InfraAutomation",
+              "to": "role/OrgAdmin",
+              "technique": "STS-001",
+              "techniqueName": "AssumeRole",
+              "resource": "arn:aws:iam::111122223333:role/OrgAdmin",
+              "conditional": false
+            },
+            {
+              "from": "role/OrgAdmin",
+              "to": "ADMIN",
+              "technique": "ADMIN",
+              "techniqueName": "administrator-equivalent",
+              "via": "effective policy allows * on *",
+              "conditional": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "principal": "role/EC2-AppServer",
+      "arn": "arn:aws:iam::111122223333:role/EC2-AppServer",
+      "paths": [
+        {
+          "steps": 1,
+          "cost": 2,
+          "conditional": false,
+          "rendered": "role/EC2-AppServer --[SSM-001 SSM SendCommand on arn:aws:ec2:ca-central-1:111122223333:instance/i-0a1b2c3d4e5f60718 (instance i-0a1b2c3d4e5f60718)]--> role/EC2-AdminInstance ==> ADMIN",
+          "hops": [
+            {
+              "from": "role/EC2-AppServer",
+              "to": "role/EC2-AdminInstance",
+              "technique": "SSM-001",
+              "techniqueName": "SSM SendCommand",
+              "resource": "arn:aws:ec2:ca-central-1:111122223333:instance/i-0a1b2c3d4e5f60718",
+              "via": "instance i-0a1b2c3d4e5f60718",
+              "conditional": false,
+              "alternatives": [
+                "SSM-002 SSM StartSession"
+              ]
+            },
+            {
+              "from": "role/EC2-AdminInstance",
+              "to": "ADMIN",
+              "technique": "ADMIN",
+              "techniqueName": "administrator-equivalent",
+              "via": "effective policy allows * on *",
+              "conditional": false
+            }
+          ]
+        },
+        {
+          "steps": 1,
+          "cost": 2,
+          "conditional": false,
+          "rendered": "role/EC2-AppServer --[CB-001 CodeBuild StartBuild (buildspec override) on arn:aws:codebuild:ca-central-1:111122223333:project/infra-deploy (project infra-deploy)]--> role/CodeBuildDeployRole ==> ADMIN",
+          "hops": [
+            {
+              "from": "role/EC2-AppServer",
+              "to": "role/CodeBuildDeployRole",
+              "technique": "CB-001",
+              "techniqueName": "CodeBuild StartBuild (buildspec override)",
+              "resource": "arn:aws:codebuild:ca-central-1:111122223333:project/infra-deploy",
+              "via": "project infra-deploy",
+              "conditional": false
+            },
+            {
+              "from": "role/CodeBuildDeployRole",
+              "to": "ADMIN",
+              "technique": "ADMIN",
+              "techniqueName": "administrator-equivalent",
+              "via": "effective policy allows iam:* on *",
+              "conditional": false
+            }
+          ]
+        },
+        {
+          "steps": 1,
+          "cost": 2,
+          "conditional": false,
+          "rendered": "role/EC2-AppServer --[LAMBDA-003 UpdateFunctionCode on arn:aws:lambda:ca-central-1:111122223333:function:nightly-report (function nightly-report)]--> role/LambdaAdminExec ==> ADMIN",
+          "hops": [
+            {
+              "from": "role/EC2-AppServer",
+              "to": "role/LambdaAdminExec",
+              "technique": "LAMBDA-003",
+              "techniqueName": "UpdateFunctionCode",
+              "resource": "arn:aws:lambda:ca-central-1:111122223333:function:nightly-report",
+              "via": "function nightly-report",
+              "conditional": false
+            },
+            {
+              "from": "role/LambdaAdminExec",
+              "to": "ADMIN",
+              "technique": "ADMIN",
+              "techniqueName": "administrator-equivalent",
+              "via": "effective policy allows * on *",
+              "conditional": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "principal": "user/carol",
+      "arn": "arn:aws:iam::111122223333:user/carol",
+      "paths": [
+        {
+          "steps": 1,
+          "cost": 2,
+          "conditional": false,
+          "rendered": "user/carol --[LAMBDA-001 PassRole+Lambda CreateFunction+InvokeFunction]--> role/LambdaAdminExec ==> ADMIN",
+          "hops": [
+            {
+              "from": "user/carol",
+              "to": "role/LambdaAdminExec",
+              "technique": "LAMBDA-001",
+              "techniqueName": "PassRole+Lambda CreateFunction+InvokeFunction",
+              "resource": "arn:aws:iam::111122223333:role/service-role/LambdaAdminExec",
+              "conditional": false
+            },
+            {
+              "from": "role/LambdaAdminExec",
+              "to": "ADMIN",
+              "technique": "ADMIN",
+              "techniqueName": "administrator-equivalent",
+              "via": "effective policy allows * on *",
+              "conditional": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "principal": "user/olivia",
+      "arn": "arn:aws:iam::111122223333:user/olivia",
+      "paths": [
+        {
+          "steps": 1,
+          "cost": 2,
+          "conditional": false,
+          "rendered": "user/olivia --[LAMBDA-003 UpdateFunctionCode on arn:aws:lambda:ca-central-1:111122223333:function:nightly-report (function nightly-report)]--> role/LambdaAdminExec ==> ADMIN",
+          "hops": [
+            {
+              "from": "user/olivia",
+              "to": "role/LambdaAdminExec",
+              "technique": "LAMBDA-003",
+              "techniqueName": "UpdateFunctionCode",
+              "resource": "arn:aws:lambda:ca-central-1:111122223333:function:nightly-report",
+              "via": "function nightly-report",
+              "conditional": false
+            },
+            {
+              "from": "role/LambdaAdminExec",
+              "to": "ADMIN",
+              "technique": "ADMIN",
+              "techniqueName": "administrator-equivalent",
+              "via": "effective policy allows * on *",
+              "conditional": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "principal": "user/quinn",
+      "arn": "arn:aws:iam::111122223333:user/quinn",
+      "paths": [
+        {
+          "steps": 1,
+          "cost": 2,
+          "conditional": false,
+          "rendered": "user/quinn --[CB-001 CodeBuild StartBuild (buildspec override) on arn:aws:codebuild:ca-central-1:111122223333:project/infra-deploy (project infra-deploy)]--> role/CodeBuildDeployRole ==> ADMIN",
+          "hops": [
+            {
+              "from": "user/quinn",
+              "to": "role/CodeBuildDeployRole",
+              "technique": "CB-001",
+              "techniqueName": "CodeBuild StartBuild (buildspec override)",
+              "resource": "arn:aws:codebuild:ca-central-1:111122223333:project/infra-deploy",
+              "via": "project infra-deploy",
+              "conditional": false
+            },
+            {
+              "from": "role/CodeBuildDeployRole",
+              "to": "ADMIN",
+              "technique": "ADMIN",
+              "techniqueName": "administrator-equivalent",
+              "via": "effective policy allows iam:* on *",
+              "conditional": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "principal": "user/trent",
+      "arn": "arn:aws:iam::111122223333:user/trent",
+      "paths": [
+        {
+          "steps": 1,
+          "cost": 2,
+          "conditional": false,
+          "rendered": "user/trent --[IAM-013 UpdateAssumeRolePolicy]--> role/OrgAdmin ==> ADMIN",
+          "hops": [
+            {
+              "from": "user/trent",
+              "to": "role/OrgAdmin",
+              "technique": "IAM-013",
+              "techniqueName": "UpdateAssumeRolePolicy",
+              "resource": "arn:aws:iam::111122223333:role/OrgAdmin",
+              "conditional": false
+            },
+            {
+              "from": "role/OrgAdmin",
+              "to": "ADMIN",
+              "technique": "ADMIN",
+              "techniqueName": "administrator-equivalent",
+              "via": "effective policy allows * on *",
+              "conditional": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "principal": "user/bob",
+      "arn": "arn:aws:iam::111122223333:user/bob",
+      "paths": [
+        {
+          "steps": 3,
+          "cost": 3,
+          "conditional": false,
+          "rendered": "user/bob --[STS-001 AssumeRole]--> role/CI-Deployer --[STS-001 AssumeRole]--> role/InfraAutomation --[STS-001 AssumeRole]--> role/OrgAdmin ==> ADMIN",
+          "hops": [
+            {
+              "from": "user/bob",
+              "to": "role/CI-Deployer",
+              "technique": "STS-001",
+              "techniqueName": "AssumeRole",
+              "resource": "arn:aws:iam::111122223333:role/CI-Deployer",
+              "conditional": false
+            },
+            {
+              "from": "role/CI-Deployer",
+              "to": "role/InfraAutomation",
+              "technique": "STS-001",
+              "techniqueName": "AssumeRole",
+              "resource": "arn:aws:iam::111122223333:role/InfraAutomation",
+              "conditional": false
+            },
+            {
+              "from": "role/InfraAutomation",
+              "to": "role/OrgAdmin",
+              "technique": "STS-001",
+              "techniqueName": "AssumeRole",
+              "resource": "arn:aws:iam::111122223333:role/OrgAdmin",
+              "conditional": false
+            },
+            {
+              "from": "role/OrgAdmin",
+              "to": "ADMIN",
+              "technique": "ADMIN",
+              "techniqueName": "administrator-equivalent",
+              "via": "effective policy allows * on *",
+              "conditional": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "principal": "user/dave",
+      "arn": "arn:aws:iam::111122223333:user/dave",
+      "paths": [
+        {
+          "steps": 1,
+          "cost": 4,
+          "conditional": true,
+          "rendered": "user/dave --[STS-001 AssumeRole [conditional]]--> role/BreakGlassAdmin ==> ADMIN",
+          "hops": [
+            {
+              "from": "user/dave",
+              "to": "role/BreakGlassAdmin",
+              "technique": "STS-001",
+              "techniqueName": "AssumeRole",
+              "resource": "arn:aws:iam::111122223333:role/BreakGlassAdmin",
+              "conditional": true,
+              "notes": [
+                "trust policy: Bool aws:MultiFactorAuthPresent=[true] (key not known offline)"
+              ]
+            },
+            {
+              "from": "role/BreakGlassAdmin",
+              "to": "ADMIN",
+              "technique": "ADMIN",
+              "techniqueName": "administrator-equivalent",
+              "via": "effective policy allows * on *",
+              "conditional": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "principal": "user/ken",
+      "arn": "arn:aws:iam::111122223333:user/ken",
+      "paths": [
+        {
+          "steps": 1,
+          "cost": 5,
+          "conditional": true,
+          "rendered": "user/ken --[SSM-001 SSM SendCommand on arn:aws:ec2:ca-central-1:111122223333:instance/i-0a1b2c3d4e5f60718 (instance i-0a1b2c3d4e5f60718) [conditional]]--> role/EC2-AdminInstance ==> ADMIN",
+          "hops": [
+            {
+              "from": "user/ken",
+              "to": "role/EC2-AdminInstance",
+              "technique": "SSM-001",
+              "techniqueName": "SSM SendCommand",
+              "resource": "arn:aws:ec2:ca-central-1:111122223333:instance/i-0a1b2c3d4e5f60718",
+              "via": "instance i-0a1b2c3d4e5f60718",
+              "conditional": true,
+              "notes": [
+                "ssm:SendCommand: IpAddress aws:SourceIp=[203.0.113.0/24 198.51.100.0/24] (key not known offline)"
+              ]
+            },
+            {
+              "from": "role/EC2-AdminInstance",
+              "to": "ADMIN",
+              "technique": "ADMIN",
+              "techniqueName": "administrator-equivalent",
+              "via": "effective policy allows * on *",
+              "conditional": false
+            }
+          ]
+        },
+        {
+          "steps": 2,
+          "cost": 7,
+          "conditional": true,
+          "rendered": "user/ken --[SSM-001 SSM SendCommand on arn:aws:ec2:ca-central-1:111122223333:instance/i-0fedcba9876543210 (instance i-0fedcba9876543210) [conditional]]--> role/EC2-AppServer --[SSM-001 SSM SendCommand on arn:aws:ec2:ca-central-1:111122223333:instance/i-0a1b2c3d4e5f60718 (instance i-0a1b2c3d4e5f60718)]--> role/EC2-AdminInstance ==> ADMIN",
+          "hops": [
+            {
+              "from": "user/ken",
+              "to": "role/EC2-AppServer",
+              "technique": "SSM-001",
+              "techniqueName": "SSM SendCommand",
+              "resource": "arn:aws:ec2:ca-central-1:111122223333:instance/i-0fedcba9876543210",
+              "via": "instance i-0fedcba9876543210",
+              "conditional": true,
+              "notes": [
+                "ssm:SendCommand: IpAddress aws:SourceIp=[203.0.113.0/24 198.51.100.0/24] (key not known offline)"
+              ]
+            },
+            {
+              "from": "role/EC2-AppServer",
+              "to": "role/EC2-AdminInstance",
+              "technique": "SSM-001",
+              "techniqueName": "SSM SendCommand",
+              "resource": "arn:aws:ec2:ca-central-1:111122223333:instance/i-0a1b2c3d4e5f60718",
+              "via": "instance i-0a1b2c3d4e5f60718",
+              "conditional": false,
+              "alternatives": [
+                "SSM-002 SSM StartSession"
+              ]
+            },
+            {
+              "from": "role/EC2-AdminInstance",
+              "to": "ADMIN",
+              "technique": "ADMIN",
+              "techniqueName": "administrator-equivalent",
+              "via": "effective policy allows * on *",
+              "conditional": false
+            }
+          ]
+        },
+        {
+          "steps": 2,
+          "cost": 7,
+          "conditional": true,
+          "rendered": "user/ken --[SSM-001 SSM SendCommand on arn:aws:ec2:ca-central-1:111122223333:instance/i-0fedcba9876543210 (instance i-0fedcba9876543210) [conditional]]--> role/EC2-AppServer --[CB-001 CodeBuild StartBuild (buildspec override) on arn:aws:codebuild:ca-central-1:111122223333:project/infra-deploy (project infra-deploy)]--> role/CodeBuildDeployRole ==> ADMIN",
+          "hops": [
+            {
+              "from": "user/ken",
+              "to": "role/EC2-AppServer",
+              "technique": "SSM-001",
+              "techniqueName": "SSM SendCommand",
+              "resource": "arn:aws:ec2:ca-central-1:111122223333:instance/i-0fedcba9876543210",
+              "via": "instance i-0fedcba9876543210",
+              "conditional": true,
+              "notes": [
+                "ssm:SendCommand: IpAddress aws:SourceIp=[203.0.113.0/24 198.51.100.0/24] (key not known offline)"
+              ]
+            },
+            {
+              "from": "role/EC2-AppServer",
+              "to": "role/CodeBuildDeployRole",
+              "technique": "CB-001",
+              "techniqueName": "CodeBuild StartBuild (buildspec override)",
+              "resource": "arn:aws:codebuild:ca-central-1:111122223333:project/infra-deploy",
+              "via": "project infra-deploy",
+              "conditional": false
+            },
+            {
+              "from": "role/CodeBuildDeployRole",
+              "to": "ADMIN",
+              "technique": "ADMIN",
+              "techniqueName": "administrator-equivalent",
+              "via": "effective policy allows iam:* on *",
+              "conditional": false
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "noPath": [
+    "role/GlueETLRole",
+    "role/LambdaThumbnailer",
+    "role/ReadOnlyAuditor",
+    "user/erin",
+    "user/frank",
+    "user/grace",
+    "user/svc-backup"
+  ],
+  "cycles": [
+    [
+      "role/CI-Deployer",
+      "role/InfraAutomation"
+    ]
+  ],
+  "warnings": []
+}

@@ -1,0 +1,10 @@
+PRINCIPAL                 DECISION     DETAIL
+role/BreakGlassAdmin      allow        allowed by [identity] AdministratorAccess (managed) stmt #0: Allow
+role/EC2-AdminInstance    allow        allowed by [identity] AdministratorAccess (managed) stmt #0: Allow
+role/OrgAdmin             allow        allowed by [identity] AdministratorAccess (managed) stmt #0: Allow
+role/CodeBuildDeployRole  allow        allowed by [identity] IAMFullAccess (managed) stmt #0: Allow
+role/LambdaAdminExec      allow        allowed by [identity] AdministratorAccess (managed) stmt #0: Allow
+user/carol                conditional  allowed conditionally: identity allow is conditional ([identity] LambdaDeployPolicy (managed) stmt PassLambdaRoles: Allow (conditional: StringEquals iam:PassedToService=[lambda.amazonaws.com] (key not known offline)))
+user/heidi                allow        allowed by [identity] AdministratorAccess (group:Admins) stmt #0: Allow
+
+6 principal(s) allowed, 1 conditionally, for iam:PassRole on arn:aws:iam::111122223333:role/service-role/LambdaAdminExec.

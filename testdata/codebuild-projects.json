@@ -1,0 +1,20 @@
+{
+    "projects": [
+        {
+            "name": "infra-deploy",
+            "arn": "arn:aws:codebuild:ca-central-1:111122223333:project/infra-deploy",
+            "description": "Applies Terraform for shared infrastructure",
+            "source": {
+                "type": "GITHUB",
+                "location": "https://github.com/acme-corp/infrastructure.git"
+            },
+            "serviceRole": "arn:aws:iam::111122223333:role/service-role/CodeBuildDeployRole",
+            "environment": {
+                "type": "LINUX_CONTAINER",
+                "image": "aws/codebuild/standard:7.0",
+                "computeType": "BUILD_GENERAL1_SMALL"
+            }
+        }
+    ],
+    "projectsNotFound": []
+}

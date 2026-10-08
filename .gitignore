@@ -1,0 +1,21 @@
+# Binaries
+/iampath
+/iampath.exe
+/dist/
+*.test
+*.out
+
+# Go tooling
+/coverage.*
+/vendor/
+
+# Real account exports: never commit customer data
+/exports/
+*-authorization-details*.json
+
+# Editors / OS
+.idea/
+.vscode/
+*.swp
+.DS_Store
+Thumbs.db

@@ -1,0 +1,758 @@
+{
+  "$schema": "https://json.schemastore.org/sarif-2.1.0.json",
+  "runs": [
+    {
+      "results": [
+        {
+          "ruleId": "STS-001",
+          "level": "error",
+          "message": {
+            "text": "role/InfraAutomation can escalate to administrator in 1 step: role/InfraAutomation --[STS-001 AssumeRole]--> role/OrgAdmin ==> ADMIN"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "testdata/account.json"
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "role/InfraAutomation",
+                  "fullyQualifiedName": "arn:aws:iam::111122223333:role/InfraAutomation",
+                  "kind": "role"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "iampathPath/v1": "7fbe11df6baa0f564e02e7cfbdcadda7"
+          },
+          "properties": {
+            "conditional": false,
+            "cost": 1,
+            "paths": [
+              "role/InfraAutomation --[STS-001 AssumeRole]--> role/OrgAdmin ==> ADMIN"
+            ],
+            "principalArn": "arn:aws:iam::111122223333:role/InfraAutomation",
+            "steps": 1
+          }
+        },
+        {
+          "ruleId": "IAM-001",
+          "level": "error",
+          "message": {
+            "text": "user/alice can escalate to administrator in 1 step: user/alice --[IAM-001 CreatePolicyVersion on arn:aws:iam::111122223333:policy/DeveloperPolicy]--> ADMIN"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "testdata/account.json"
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "user/alice",
+                  "fullyQualifiedName": "arn:aws:iam::111122223333:user/alice",
+                  "kind": "user"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "iampathPath/v1": "193c89de9f441e40c80269c8670fff51"
+          },
+          "properties": {
+            "conditional": false,
+            "cost": 1,
+            "paths": [
+              "user/alice --[IAM-001 CreatePolicyVersion on arn:aws:iam::111122223333:policy/DeveloperPolicy]--> ADMIN"
+            ],
+            "principalArn": "arn:aws:iam::111122223333:user/alice",
+            "steps": 1
+          }
+        },
+        {
+          "ruleId": "IAM-010",
+          "level": "error",
+          "message": {
+            "text": "user/ivan can escalate to administrator in 1 step: user/ivan --[IAM-010 CreateAccessKey]--> user/heidi ==> ADMIN"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "testdata/account.json"
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "user/ivan",
+                  "fullyQualifiedName": "arn:aws:iam::111122223333:user/ivan",
+                  "kind": "user"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "iampathPath/v1": "d74c43fc952b06b72f0a432f72ffa443"
+          },
+          "properties": {
+            "conditional": false,
+            "cost": 1,
+            "paths": [
+              "user/ivan --[IAM-010 CreateAccessKey]--> user/heidi ==> ADMIN",
+              "user/ivan --[IAM-010 CreateAccessKey]--> user/alice --[IAM-001 CreatePolicyVersion on arn:aws:iam::111122223333:policy/DeveloperPolicy]--> ADMIN",
+              "user/ivan --[IAM-010 CreateAccessKey]--> user/judy --[IAM-009 AddUserToGroup on arn:aws:iam::111122223333:group/Admins (join group Admins)]--> ADMIN"
+            ],
+            "principalArn": "arn:aws:iam::111122223333:user/ivan",
+            "steps": 1
+          }
+        },
+        {
+          "ruleId": "IAM-009",
+          "level": "error",
+          "message": {
+            "text": "user/judy can escalate to administrator in 1 step: user/judy --[IAM-009 AddUserToGroup on arn:aws:iam::111122223333:group/Admins (join group Admins)]--> ADMIN"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "testdata/account.json"
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "user/judy",
+                  "fullyQualifiedName": "arn:aws:iam::111122223333:user/judy",
+                  "kind": "user"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "iampathPath/v1": "f216c6fe36e3513f80d755c78e8dab0b"
+          },
+          "properties": {
+            "conditional": false,
+            "cost": 1,
+            "paths": [
+              "user/judy --[IAM-009 AddUserToGroup on arn:aws:iam::111122223333:group/Admins (join group Admins)]--> ADMIN"
+            ],
+            "principalArn": "arn:aws:iam::111122223333:user/judy",
+            "steps": 1
+          }
+        },
+        {
+          "ruleId": "IAM-002",
+          "level": "error",
+          "message": {
+            "text": "user/peggy can escalate to administrator in 1 step: user/peggy --[IAM-002 SetDefaultPolicyVersion on arn:aws:iam::111122223333:policy/ReportingAnalystPolicy (restore version v1)]--> ADMIN"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "testdata/account.json"
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "user/peggy",
+                  "fullyQualifiedName": "arn:aws:iam::111122223333:user/peggy",
+                  "kind": "user"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "iampathPath/v1": "91070c274d0d0e0ac22be68a5a2e857d"
+          },
+          "properties": {
+            "conditional": false,
+            "cost": 1,
+            "paths": [
+              "user/peggy --[IAM-002 SetDefaultPolicyVersion on arn:aws:iam::111122223333:policy/ReportingAnalystPolicy (restore version v1)]--> ADMIN"
+            ],
+            "principalArn": "arn:aws:iam::111122223333:user/peggy",
+            "steps": 1
+          }
+        },
+        {
+          "ruleId": "STS-001",
+          "level": "error",
+          "message": {
+            "text": "role/CI-Deployer can escalate to administrator in 2 steps: role/CI-Deployer --[STS-001 AssumeRole]--> role/InfraAutomation --[STS-001 AssumeRole]--> role/OrgAdmin ==> ADMIN"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "testdata/account.json"
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "role/CI-Deployer",
+                  "fullyQualifiedName": "arn:aws:iam::111122223333:role/CI-Deployer",
+                  "kind": "role"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "iampathPath/v1": "db1d8178c7492f993e5a5e979f371b78"
+          },
+          "properties": {
+            "conditional": false,
+            "cost": 2,
+            "paths": [
+              "role/CI-Deployer --[STS-001 AssumeRole]--> role/InfraAutomation --[STS-001 AssumeRole]--> role/OrgAdmin ==> ADMIN"
+            ],
+            "principalArn": "arn:aws:iam::111122223333:role/CI-Deployer",
+            "steps": 2
+          }
+        },
+        {
+          "ruleId": "SSM-001",
+          "level": "error",
+          "message": {
+            "text": "role/EC2-AppServer can escalate to administrator in 1 step: role/EC2-AppServer --[SSM-001 SSM SendCommand on arn:aws:ec2:ca-central-1:111122223333:instance/i-0a1b2c3d4e5f60718 (instance i-0a1b2c3d4e5f60718)]--> role/EC2-AdminInstance ==> ADMIN"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "testdata/account.json"
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "role/EC2-AppServer",
+                  "fullyQualifiedName": "arn:aws:iam::111122223333:role/EC2-AppServer",
+                  "kind": "role"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "iampathPath/v1": "da460553a919e82f54904208a7e79cfe"
+          },
+          "properties": {
+            "conditional": false,
+            "cost": 2,
+            "paths": [
+              "role/EC2-AppServer --[SSM-001 SSM SendCommand on arn:aws:ec2:ca-central-1:111122223333:instance/i-0a1b2c3d4e5f60718 (instance i-0a1b2c3d4e5f60718)]--> role/EC2-AdminInstance ==> ADMIN",
+              "role/EC2-AppServer --[CB-001 CodeBuild StartBuild (buildspec override) on arn:aws:codebuild:ca-central-1:111122223333:project/infra-deploy (project infra-deploy)]--> role/CodeBuildDeployRole ==> ADMIN",
+              "role/EC2-AppServer --[LAMBDA-003 UpdateFunctionCode on arn:aws:lambda:ca-central-1:111122223333:function:nightly-report (function nightly-report)]--> role/LambdaAdminExec ==> ADMIN"
+            ],
+            "principalArn": "arn:aws:iam::111122223333:role/EC2-AppServer",
+            "steps": 1
+          }
+        },
+        {
+          "ruleId": "LAMBDA-001",
+          "level": "error",
+          "message": {
+            "text": "user/carol can escalate to administrator in 1 step: user/carol --[LAMBDA-001 PassRole+Lambda CreateFunction+InvokeFunction]--> role/LambdaAdminExec ==> ADMIN"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "testdata/account.json"
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "user/carol",
+                  "fullyQualifiedName": "arn:aws:iam::111122223333:user/carol",
+                  "kind": "user"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "iampathPath/v1": "ecabf3b5e3c4a80c80b273ef9818e3be"
+          },
+          "properties": {
+            "conditional": false,
+            "cost": 2,
+            "paths": [
+              "user/carol --[LAMBDA-001 PassRole+Lambda CreateFunction+InvokeFunction]--> role/LambdaAdminExec ==> ADMIN"
+            ],
+            "principalArn": "arn:aws:iam::111122223333:user/carol",
+            "steps": 1
+          }
+        },
+        {
+          "ruleId": "LAMBDA-003",
+          "level": "error",
+          "message": {
+            "text": "user/olivia can escalate to administrator in 1 step: user/olivia --[LAMBDA-003 UpdateFunctionCode on arn:aws:lambda:ca-central-1:111122223333:function:nightly-report (function nightly-report)]--> role/LambdaAdminExec ==> ADMIN"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "testdata/account.json"
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "user/olivia",
+                  "fullyQualifiedName": "arn:aws:iam::111122223333:user/olivia",
+                  "kind": "user"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "iampathPath/v1": "5dcdaf86b9125fdbbbc82b342dcf6ab9"
+          },
+          "properties": {
+            "conditional": false,
+            "cost": 2,
+            "paths": [
+              "user/olivia --[LAMBDA-003 UpdateFunctionCode on arn:aws:lambda:ca-central-1:111122223333:function:nightly-report (function nightly-report)]--> role/LambdaAdminExec ==> ADMIN"
+            ],
+            "principalArn": "arn:aws:iam::111122223333:user/olivia",
+            "steps": 1
+          }
+        },
+        {
+          "ruleId": "CB-001",
+          "level": "error",
+          "message": {
+            "text": "user/quinn can escalate to administrator in 1 step: user/quinn --[CB-001 CodeBuild StartBuild (buildspec override) on arn:aws:codebuild:ca-central-1:111122223333:project/infra-deploy (project infra-deploy)]--> role/CodeBuildDeployRole ==> ADMIN"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "testdata/account.json"
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "user/quinn",
+                  "fullyQualifiedName": "arn:aws:iam::111122223333:user/quinn",
+                  "kind": "user"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "iampathPath/v1": "9501caf2d83744162c6a344b82705901"
+          },
+          "properties": {
+            "conditional": false,
+            "cost": 2,
+            "paths": [
+              "user/quinn --[CB-001 CodeBuild StartBuild (buildspec override) on arn:aws:codebuild:ca-central-1:111122223333:project/infra-deploy (project infra-deploy)]--> role/CodeBuildDeployRole ==> ADMIN"
+            ],
+            "principalArn": "arn:aws:iam::111122223333:user/quinn",
+            "steps": 1
+          }
+        },
+        {
+          "ruleId": "IAM-013",
+          "level": "error",
+          "message": {
+            "text": "user/trent can escalate to administrator in 1 step: user/trent --[IAM-013 UpdateAssumeRolePolicy]--> role/OrgAdmin ==> ADMIN"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "testdata/account.json"
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "user/trent",
+                  "fullyQualifiedName": "arn:aws:iam::111122223333:user/trent",
+                  "kind": "user"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "iampathPath/v1": "2020eb824f99b921a719003d9539c805"
+          },
+          "properties": {
+            "conditional": false,
+            "cost": 2,
+            "paths": [
+              "user/trent --[IAM-013 UpdateAssumeRolePolicy]--> role/OrgAdmin ==> ADMIN"
+            ],
+            "principalArn": "arn:aws:iam::111122223333:user/trent",
+            "steps": 1
+          }
+        },
+        {
+          "ruleId": "STS-001",
+          "level": "error",
+          "message": {
+            "text": "user/bob can escalate to administrator in 3 steps: user/bob --[STS-001 AssumeRole]--> role/CI-Deployer --[STS-001 AssumeRole]--> role/InfraAutomation --[STS-001 AssumeRole]--> role/OrgAdmin ==> ADMIN"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "testdata/account.json"
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "user/bob",
+                  "fullyQualifiedName": "arn:aws:iam::111122223333:user/bob",
+                  "kind": "user"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "iampathPath/v1": "49d981a7e228ffadaf6d5fc511b038fb"
+          },
+          "properties": {
+            "conditional": false,
+            "cost": 3,
+            "paths": [
+              "user/bob --[STS-001 AssumeRole]--> role/CI-Deployer --[STS-001 AssumeRole]--> role/InfraAutomation --[STS-001 AssumeRole]--> role/OrgAdmin ==> ADMIN"
+            ],
+            "principalArn": "arn:aws:iam::111122223333:user/bob",
+            "steps": 3
+          }
+        },
+        {
+          "ruleId": "STS-001",
+          "level": "warning",
+          "message": {
+            "text": "user/dave can escalate to administrator in 1 step (conditional: depends on request conditions that could not be evaluated offline): user/dave --[STS-001 AssumeRole [conditional]]--> role/BreakGlassAdmin ==> ADMIN"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "testdata/account.json"
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "user/dave",
+                  "fullyQualifiedName": "arn:aws:iam::111122223333:user/dave",
+                  "kind": "user"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "iampathPath/v1": "9e8a17e68acb3b2a3c23213fd26e4c03"
+          },
+          "properties": {
+            "conditional": true,
+            "cost": 4,
+            "paths": [
+              "user/dave --[STS-001 AssumeRole [conditional]]--> role/BreakGlassAdmin ==> ADMIN"
+            ],
+            "principalArn": "arn:aws:iam::111122223333:user/dave",
+            "steps": 1
+          }
+        },
+        {
+          "ruleId": "SSM-001",
+          "level": "warning",
+          "message": {
+            "text": "user/ken can escalate to administrator in 1 step (conditional: depends on request conditions that could not be evaluated offline): user/ken --[SSM-001 SSM SendCommand on arn:aws:ec2:ca-central-1:111122223333:instance/i-0a1b2c3d4e5f60718 (instance i-0a1b2c3d4e5f60718) [conditional]]--> role/EC2-AdminInstance ==> ADMIN"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "testdata/account.json"
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "user/ken",
+                  "fullyQualifiedName": "arn:aws:iam::111122223333:user/ken",
+                  "kind": "user"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "iampathPath/v1": "108db992bf8ef0e730868bc47672cb96"
+          },
+          "properties": {
+            "conditional": true,
+            "cost": 5,
+            "paths": [
+              "user/ken --[SSM-001 SSM SendCommand on arn:aws:ec2:ca-central-1:111122223333:instance/i-0a1b2c3d4e5f60718 (instance i-0a1b2c3d4e5f60718) [conditional]]--> role/EC2-AdminInstance ==> ADMIN",
+              "user/ken --[SSM-001 SSM SendCommand on arn:aws:ec2:ca-central-1:111122223333:instance/i-0fedcba9876543210 (instance i-0fedcba9876543210) [conditional]]--> role/EC2-AppServer --[SSM-001 SSM SendCommand on arn:aws:ec2:ca-central-1:111122223333:instance/i-0a1b2c3d4e5f60718 (instance i-0a1b2c3d4e5f60718)]--> role/EC2-AdminInstance ==> ADMIN",
+              "user/ken --[SSM-001 SSM SendCommand on arn:aws:ec2:ca-central-1:111122223333:instance/i-0fedcba9876543210 (instance i-0fedcba9876543210) [conditional]]--> role/EC2-AppServer --[CB-001 CodeBuild StartBuild (buildspec override) on arn:aws:codebuild:ca-central-1:111122223333:project/infra-deploy (project infra-deploy)]--> role/CodeBuildDeployRole ==> ADMIN"
+            ],
+            "principalArn": "arn:aws:iam::111122223333:user/ken",
+            "steps": 1
+          }
+        }
+      ],
+      "tool": {
+        "driver": {
+          "informationUri": "https://github.com/Opsbreak/iampath",
+          "name": "iampath",
+          "rules": [
+            {
+              "id": "CB-001",
+              "name": "CodeBuildStartBuildbuildspecoverride",
+              "shortDescription": {
+                "text": "Start a build of an existing project with an attacker-supplied buildspec."
+              },
+              "fullDescription": {
+                "text": "--buildspec-override runs arbitrary commands with the project's service role."
+              },
+              "help": {
+                "text": "Remediation: Restrict codebuild:StartBuild on privileged projects and keep service roles least-privilege."
+              },
+              "properties": {
+                "category": "compute-hijack",
+                "requiredPermissions": [
+                  "codebuild:StartBuild"
+                ],
+                "tags": [
+                  "security",
+                  "aws",
+                  "iam"
+                ]
+              }
+            },
+            {
+              "id": "IAM-001",
+              "name": "CreatePolicyVersion",
+              "shortDescription": {
+                "text": "Create a new default version of a customer managed policy attached to the principal."
+              },
+              "fullDescription": {
+                "text": "iam:CreatePolicyVersion with --set-as-default replaces the effective content of the policy without needing iam:SetDefaultPolicyVersion. Anyone who can do this on a policy attached to themselves (directly or via a group) can grant themselves Action:* on Resource:*."
+              },
+              "help": {
+                "text": "Remediation: Never grant iam:CreatePolicyVersion on policies attached to the same principal. Scope the action to specific policy ARNs owned by a deployment pipeline, and alert on CreatePolicyVersion events in CloudTrail."
+              },
+              "properties": {
+                "category": "permission-modification",
+                "requiredPermissions": [
+                  "iam:CreatePolicyVersion"
+                ],
+                "tags": [
+                  "security",
+                  "aws",
+                  "iam"
+                ]
+              }
+            },
+            {
+              "id": "IAM-002",
+              "name": "SetDefaultPolicyVersion",
+              "shortDescription": {
+                "text": "Roll an attached managed policy back to an older, more permissive non-default version."
+              },
+              "fullDescription": {
+                "text": "Managed policies keep up to five versions. If an older version was broader (a common leftover after tightening a policy), switching the default version silently restores those permissions."
+              },
+              "help": {
+                "text": "Remediation: Delete unused non-default policy versions and restrict iam:SetDefaultPolicyVersion to administrators."
+              },
+              "properties": {
+                "category": "permission-modification",
+                "requiredPermissions": [
+                  "iam:SetDefaultPolicyVersion"
+                ],
+                "tags": [
+                  "security",
+                  "aws",
+                  "iam"
+                ]
+              }
+            },
+            {
+              "id": "IAM-009",
+              "name": "AddUserToGroup",
+              "shortDescription": {
+                "text": "Add the user to a group whose policies grant administrator access."
+              },
+              "fullDescription": {
+                "text": "Joining an Admins group is a single API call and is easy to miss among routine group changes."
+              },
+              "help": {
+                "text": "Remediation: Scope iam:AddUserToGroup to specific low-privilege groups and alert on changes to privileged groups."
+              },
+              "properties": {
+                "category": "permission-modification",
+                "requiredPermissions": [
+                  "iam:AddUserToGroup"
+                ],
+                "tags": [
+                  "security",
+                  "aws",
+                  "iam"
+                ]
+              }
+            },
+            {
+              "id": "IAM-010",
+              "name": "CreateAccessKey",
+              "shortDescription": {
+                "text": "Create an access key for another IAM user."
+              },
+              "fullDescription": {
+                "text": "Yields long-term credentials for the target user (each user may have two keys; a full key slot blocks it)."
+              },
+              "help": {
+                "text": "Remediation: Restrict iam:CreateAccessKey to user/${aws:username} and prefer IAM Identity Center over IAM users."
+              },
+              "properties": {
+                "category": "credential-access",
+                "requiredPermissions": [
+                  "iam:CreateAccessKey"
+                ],
+                "tags": [
+                  "security",
+                  "aws",
+                  "iam"
+                ]
+              }
+            },
+            {
+              "id": "IAM-013",
+              "name": "UpdateAssumeRolePolicy",
+              "shortDescription": {
+                "text": "Rewrite a role's trust policy to trust the attacker, then assume it."
+              },
+              "fullDescription": {
+                "text": "After naming their own ARN in the trust policy, a same-account principal can assume the role. Only an explicit Deny or an SCP on sts:AssumeRole stops the second step."
+              },
+              "help": {
+                "text": "Remediation: Restrict iam:UpdateAssumeRolePolicy to administrators; monitor trust-policy changes with AWS Config."
+              },
+              "properties": {
+                "category": "role-assumption",
+                "requiredPermissions": [
+                  "iam:UpdateAssumeRolePolicy",
+                  "sts:AssumeRole"
+                ],
+                "tags": [
+                  "security",
+                  "aws",
+                  "iam"
+                ]
+              }
+            },
+            {
+              "id": "LAMBDA-001",
+              "name": "PassRoleAndLambdaCreateFunctionAndInvokeFunction",
+              "shortDescription": {
+                "text": "Create a Lambda function with a privileged execution role and invoke it."
+              },
+              "fullDescription": {
+                "text": "The function's code runs with the passed role's permissions and can, for example, attach AdministratorAccess to the attacker's user."
+              },
+              "help": {
+                "text": "Remediation: Scope iam:PassRole to specific role ARNs and add an iam:PassedToService condition; keep Lambda execution roles least-privilege."
+              },
+              "properties": {
+                "category": "passrole-compute",
+                "requiredPermissions": [
+                  "iam:PassRole",
+                  "lambda:CreateFunction",
+                  "lambda:InvokeFunction"
+                ],
+                "tags": [
+                  "security",
+                  "aws",
+                  "iam"
+                ]
+              }
+            },
+            {
+              "id": "LAMBDA-003",
+              "name": "UpdateFunctionCode",
+              "shortDescription": {
+                "text": "Replace the code of an existing function whose execution role is more privileged."
+              },
+              "fullDescription": {
+                "text": "The new code runs with the function's role on the next invocation; no iam:PassRole is required."
+              },
+              "help": {
+                "text": "Remediation: Restrict lambda:UpdateFunctionCode to deployment pipelines and enable code signing for Lambda."
+              },
+              "properties": {
+                "category": "compute-hijack",
+                "requiredPermissions": [
+                  "lambda:UpdateFunctionCode"
+                ],
+                "tags": [
+                  "security",
+                  "aws",
+                  "iam"
+                ]
+              }
+            },
+            {
+              "id": "SSM-001",
+              "name": "SSMSendCommand",
+              "shortDescription": {
+                "text": "Run commands on an instance whose instance profile role is more privileged."
+              },
+              "fullDescription": {
+                "text": "Commands run as root on the instance and can read the role credentials from IMDS."
+              },
+              "help": {
+                "text": "Remediation: Scope ssm:SendCommand by instance tags/ARNs and documents; avoid privileged instance profiles."
+              },
+              "properties": {
+                "category": "compute-hijack",
+                "requiredPermissions": [
+                  "ssm:SendCommand"
+                ],
+                "tags": [
+                  "security",
+                  "aws",
+                  "iam"
+                ]
+              }
+            },
+            {
+              "id": "STS-001",
+              "name": "AssumeRole",
+              "shortDescription": {
+                "text": "Assume a role whose trust policy allows the principal."
+              },
+              "fullDescription": {
+                "text": "Trust policies that name the account root delegate the decision to identity policies; broad sts:AssumeRole grants (Resource:*) then expose every such role."
+              },
+              "help": {
+                "text": "Remediation: Name specific principal ARNs in trust policies, add conditions (aws:PrincipalArn, sts:ExternalId, MFA) and scope sts:AssumeRole in identity policies to the roles that are needed."
+              },
+              "properties": {
+                "category": "role-assumption",
+                "requiredPermissions": [
+                  "sts:AssumeRole"
+                ],
+                "tags": [
+                  "security",
+                  "aws",
+                  "iam"
+                ]
+              }
+            }
+          ],
+          "version": "0.1.0"
+        }
+      }
+    }
+  ],
+  "version": "2.1.0"
+}

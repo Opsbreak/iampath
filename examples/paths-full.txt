@@ -1,0 +1,79 @@
+iampath 0.1.0 - offline IAM privilege-escalation analysis
+Account 111122223333: 28 principals, 35 escalation edges, 6 admin-equivalent principals.
+
+Administrator-equivalent principals:
+  role/BreakGlassAdmin      effective policy allows * on *
+  role/EC2-AdminInstance    effective policy allows * on *
+  role/OrgAdmin             effective policy allows * on *
+  role/CodeBuildDeployRole  effective policy allows iam:* on *
+  role/LambdaAdminExec      effective policy allows * on *
+  user/heidi                effective policy allows * on *
+
+Escalation paths: 14 principals can reach ADMIN (12 unconditionally, 2 only conditionally).
+
+[1] role/InfraAutomation  (1 step, cost 1)
+    role/InfraAutomation --[STS-001 AssumeRole]--> role/OrgAdmin ==> ADMIN
+
+[2] user/alice  (1 step, cost 1)
+    user/alice --[IAM-001 CreatePolicyVersion on arn:aws:iam::111122223333:policy/DeveloperPolicy]--> ADMIN
+
+[3] user/ivan  (1 step, cost 1)
+    path 1 (1 step, cost 1):
+      user/ivan --[IAM-010 CreateAccessKey]--> user/heidi ==> ADMIN
+    path 2 (2 steps, cost 2):
+      user/ivan --[IAM-010 CreateAccessKey]--> user/alice --[IAM-001 CreatePolicyVersion on arn:aws:iam::111122223333:policy/DeveloperPolicy]--> ADMIN
+    path 3 (2 steps, cost 2):
+      user/ivan --[IAM-010 CreateAccessKey]--> user/judy --[IAM-009 AddUserToGroup on arn:aws:iam::111122223333:group/Admins (join group Admins)]--> ADMIN
+
+[4] user/judy  (1 step, cost 1)
+    user/judy --[IAM-009 AddUserToGroup on arn:aws:iam::111122223333:group/Admins (join group Admins)]--> ADMIN
+
+[5] user/peggy  (1 step, cost 1)
+    user/peggy --[IAM-002 SetDefaultPolicyVersion on arn:aws:iam::111122223333:policy/ReportingAnalystPolicy (restore version v1)]--> ADMIN
+
+[6] role/CI-Deployer  (2 steps, cost 2)
+    role/CI-Deployer --[STS-001 AssumeRole]--> role/InfraAutomation --[STS-001 AssumeRole]--> role/OrgAdmin ==> ADMIN
+
+[7] role/EC2-AppServer  (1 step, cost 2)
+    path 1 (1 step, cost 2):
+      role/EC2-AppServer --[SSM-001 SSM SendCommand on arn:aws:ec2:ca-central-1:111122223333:instance/i-0a1b2c3d4e5f60718 (instance i-0a1b2c3d4e5f60718)]--> role/EC2-AdminInstance ==> ADMIN
+    path 2 (1 step, cost 2):
+      role/EC2-AppServer --[CB-001 CodeBuild StartBuild (buildspec override) on arn:aws:codebuild:ca-central-1:111122223333:project/infra-deploy (project infra-deploy)]--> role/CodeBuildDeployRole ==> ADMIN
+    path 3 (1 step, cost 2):
+      role/EC2-AppServer --[LAMBDA-003 UpdateFunctionCode on arn:aws:lambda:ca-central-1:111122223333:function:nightly-report (function nightly-report)]--> role/LambdaAdminExec ==> ADMIN
+
+[8] user/carol  (1 step, cost 2)
+    user/carol --[LAMBDA-001 PassRole+Lambda CreateFunction+InvokeFunction]--> role/LambdaAdminExec ==> ADMIN
+
+[9] user/olivia  (1 step, cost 2)
+    user/olivia --[LAMBDA-003 UpdateFunctionCode on arn:aws:lambda:ca-central-1:111122223333:function:nightly-report (function nightly-report)]--> role/LambdaAdminExec ==> ADMIN
+
+[10] user/quinn  (1 step, cost 2)
+    user/quinn --[CB-001 CodeBuild StartBuild (buildspec override) on arn:aws:codebuild:ca-central-1:111122223333:project/infra-deploy (project infra-deploy)]--> role/CodeBuildDeployRole ==> ADMIN
+
+[11] user/trent  (1 step, cost 2)
+    user/trent --[IAM-013 UpdateAssumeRolePolicy]--> role/OrgAdmin ==> ADMIN
+
+[12] user/bob  (3 steps, cost 3)
+    user/bob --[STS-001 AssumeRole]--> role/CI-Deployer --[STS-001 AssumeRole]--> role/InfraAutomation --[STS-001 AssumeRole]--> role/OrgAdmin ==> ADMIN
+
+[13] user/dave  (1 step, cost 4, CONDITIONAL)
+    user/dave --[STS-001 AssumeRole [conditional]]--> role/BreakGlassAdmin ==> ADMIN
+      ! trust policy: Bool aws:MultiFactorAuthPresent=[true] (key not known offline)
+
+[14] user/ken  (1 step, cost 5, CONDITIONAL)
+    path 1 (1 step, cost 5):
+      user/ken --[SSM-001 SSM SendCommand on arn:aws:ec2:ca-central-1:111122223333:instance/i-0a1b2c3d4e5f60718 (instance i-0a1b2c3d4e5f60718) [conditional]]--> role/EC2-AdminInstance ==> ADMIN
+        ! ssm:SendCommand: IpAddress aws:SourceIp=[203.0.113.0/24 198.51.100.0/24] (key not known offline)
+    path 2 (2 steps, cost 7):
+      user/ken --[SSM-001 SSM SendCommand on arn:aws:ec2:ca-central-1:111122223333:instance/i-0fedcba9876543210 (instance i-0fedcba9876543210) [conditional]]--> role/EC2-AppServer --[SSM-001 SSM SendCommand on arn:aws:ec2:ca-central-1:111122223333:instance/i-0a1b2c3d4e5f60718 (instance i-0a1b2c3d4e5f60718)]--> role/EC2-AdminInstance ==> ADMIN
+        ! ssm:SendCommand: IpAddress aws:SourceIp=[203.0.113.0/24 198.51.100.0/24] (key not known offline)
+    path 3 (2 steps, cost 7):
+      user/ken --[SSM-001 SSM SendCommand on arn:aws:ec2:ca-central-1:111122223333:instance/i-0fedcba9876543210 (instance i-0fedcba9876543210) [conditional]]--> role/EC2-AppServer --[CB-001 CodeBuild StartBuild (buildspec override) on arn:aws:codebuild:ca-central-1:111122223333:project/infra-deploy (project infra-deploy)]--> role/CodeBuildDeployRole ==> ADMIN
+        ! ssm:SendCommand: IpAddress aws:SourceIp=[203.0.113.0/24 198.51.100.0/24] (key not known offline)
+
+No path to ADMIN (7): role/GlueETLRole, role/LambdaThumbnailer, role/ReadOnlyAuditor, user/erin, user/frank, user/grace, user/svc-backup
+
+Cycles (principals that can reach each other):
+  role/CI-Deployer <-> role/InfraAutomation
+
